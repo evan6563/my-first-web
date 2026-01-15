@@ -6,3 +6,11 @@ h1 { color: blue; }
     width: 300px;
     background-color: hsl(150, 32%, 50%);
 }
+body {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;    /* 垂直居中 */
+    height: 100vh;          /* 使用整個螢幕高度 */
+    margin: 0;
+    background-color: #e0e0e0;
+}
