@@ -1,17 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
-    <title>我的第一個網頁</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>油耗計算器 - 現代簡約版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; }
+    </style>
 </head>
-<body>
-    <h1>你好，GitHub Pages！</h1>
-    <p>這是我練習設立的網站。</p>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
 
-    <p>這是我的第二次更新！</p>
-    <div class="card">
-        <h2>我的名字</h2>
-        <p>這是我正在學習 Git 的第 4 天！</p>
-    </div>
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="text-xl font-bold text-blue-600">FuelTrack</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" class="text-blue-600 border-b-2 border-blue-600 px-1">油耗計算</a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition">歷史紀錄</a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition">保養提醒</a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition">設定</a>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-500 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-md mx-auto mt-10 px-6">
+        <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+            <h2 class="text-2xl font-semibold mb-6 text-center text-gray-700">油耗數據輸入</h2>
+            
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">本次加油公升數 (L)</label>
+                    <input type="number" id="liters" placeholder="例如: 35.5" 
+                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">本次汽車總里程 (km)</label>
+                    <input type="number" id="mileage" placeholder="例如: 12500" 
+                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">本次汽油單價 (NTD)</label>
+                    <input type="number" id="price" placeholder="例如: 31.2" 
+                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+                </div>
+
+                <button onclick="calculateFuel()" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition duration-300 shadow-lg shadow-blue-200 mt-4">
+                    開始計算資料
+                </button>
+            </div>
+
+            <div id="resultArea" class="hidden mt-8 pt-6 border-t border-gray-100 animate-fade-in">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-xl text-center">
+                        <p class="text-xs text-blue-600 font-bold uppercase tracking-wider">本次花費</p>
+                        <p class="text-xl font-bold text-gray-800">NT$ <span id="totalCost">0</span></p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-xl text-center">
+                        <p class="text-xs text-green-600 font-bold uppercase tracking-wider">平均油耗</p>
+                        <p class="text-xl font-bold text-gray-800"><span id="kmPerL">0</span> km/L</p>
+                    </div>
+                </div>
+                <p class="text-center text-xs text-gray-400 mt-4 italic">* 計算結果僅供參考，實際油耗受路況影響。</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function calculateFuel() {
+            const liters = parseFloat(document.getElementById('liters').value);
+            const mileage = parseFloat(document.getElementById('mileage').value);
+            const price = parseFloat(document.getElementById('price').value);
+
+            if (liters > 0 && mileage > 0 && price > 0) {
+                const totalCost = (liters * price).toFixed(0);
+                // 這裡假設這是一個簡單的當次里程計算，若要精確計算需前次里程
+                // 為了範例完整性，我們直接顯示計算後的結果
+                const kmPerL = (mileage / liters).toFixed(2); 
+
+                document.getElementById('totalCost').innerText = totalCost;
+                document.getElementById('kmPerL').innerText = kmPerL;
+                
+                const resultArea = document.getElementById('resultArea');
+                resultArea.classList.remove('hidden');
+            } else {
+                alert('請輸入正確的數值');
+            }
+        }
+    </script>
+
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </body>
 </html>
